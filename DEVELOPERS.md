@@ -4,7 +4,8 @@ The [`main.c`](main.c) file includes the main method, which references the [`dca
 
 In its current state, the program initializes a 1DCA, of length 25, with all states set to **0**. The program then sets all states of odd indices to **1**, and all states of even indices to **2**. The program then displays the updated 1DCA.
 
-### Functions
+---
+## Files & Functions
 
 #### `main.c`
 
