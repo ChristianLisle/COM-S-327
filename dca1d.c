@@ -1,30 +1,22 @@
 #include <stdio.h>
 
-void init1DCA(int numCells, int* arrayPointer) {
-  unsigned char cellularAutomata[numCells];
-
-  // arrayPointer = cellularAutomata[0];
-
+void init1DCA(int numCells, unsigned char* cellularAutomata) {
   for (int i = 0; i < numCells; i++) {
-    cellularAutomata[i] = 0;
+    cellularAutomata[i] = '0';
   }
 }
 
-void set1DCACell(int* arrayPointer, int index, unsigned char updatedState) {
+void set1DCACell(unsigned char* cellularAutomata, int index, unsigned char updatedState) {
   if (index < 0) {
     return;
   }
 
-  // char cellularAutomata[index];
+  cellularAutomata[index] = updatedState;
 }
 
-void display1DCA(int* arrayPointer, int numCells) {
-  printf("%d\n", *arrayPointer);
-
+void display1DCA(unsigned char* cellularAutomata, int numCells) {
   for (int i = 0; i < numCells; i++) {
-    int* address = *arrayPointer + i;
-    printf("%c ", *address);
-    // printf("x ");
+    printf("%c ", cellularAutomata[i]);
   }
 
   printf("\n");

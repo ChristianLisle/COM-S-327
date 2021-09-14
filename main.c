@@ -1,14 +1,18 @@
 #include "dca1d.h"
 
 int main(void) {
-  // 25 cells wide
-  // odd cell indices: 1
-  // even cell indices: 2
-  // then print all cell indices
-
-  char cellularAutomata[25];
+  unsigned char cellularAutomata[25];
 
   init1DCA(25, cellularAutomata);
+
+  for (int i = 0; i < 25; i++) {
+    if (i % 2 == 0) {
+      set1DCACell(cellularAutomata, i, '2');
+    }
+    else {
+      set1DCACell(cellularAutomata, i, '1');
+    }
+  }
 
   display1DCA(cellularAutomata, 25);
 }
