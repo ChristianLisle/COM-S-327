@@ -7,10 +7,10 @@ int main(void) {
 
   for (int i = 0; i < 25; i++) {
     if (i % 2 == 0) {
-      set1DCACell(cellularAutomata, i, '2');
+      set1DCACell(cellularAutomata, i, 2);
     }
     else {
-      set1DCACell(cellularAutomata, i, '1');
+      set1DCACell(cellularAutomata, i, 1);
     }
   }
 

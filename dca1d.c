@@ -2,7 +2,7 @@
 
 void init1DCA(int numCells, unsigned char* cellularAutomata) {
   for (int i = 0; i < numCells; i++) {
-    cellularAutomata[i] = '0';
+    cellularAutomata[i] = 0;
   }
 }
 
@@ -16,7 +16,7 @@ void set1DCACell(unsigned char* cellularAutomata, int index, unsigned char updat
 
 void display1DCA(unsigned char* cellularAutomata, int numCells) {
   for (int i = 0; i < numCells; i++) {
-    printf("%c ", cellularAutomata[i]);
+    printf("%d ", cellularAutomata[i]);
   }
 
   printf("\n");
