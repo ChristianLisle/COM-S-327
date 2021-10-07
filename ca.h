@@ -7,6 +7,9 @@
 typedef struct ca_data {
   unsigned char* cells;
   int numCells;
+  int possibleStates;
+  int wrapFlag;
+  unsigned char quiescentState;
 } CELLULAR_AUTOMATA;
 
 void init1DCA(CELLULAR_AUTOMATA*, int);
