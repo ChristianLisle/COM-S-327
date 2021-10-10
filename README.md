@@ -16,7 +16,7 @@ View more about how the program works in [DEVELOPERS.md](DEVELOPERS.md).
 #### Parameters (required)
 ```
 (1) Integer between 10 and 100 representing the number of cells in the 1DCA.
-(2) Natural number representing the states possible for each cell.
+(2) 1 or 2 representing the states possible for each cell.
 (3) Flag indicating whether the simulation wraps or not for edge cases.
     Allowed values:
     * wrap

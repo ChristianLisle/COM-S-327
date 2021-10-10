@@ -18,7 +18,7 @@ In its current state, the program initializes a 1DCA based on the user input (co
 
 #### [`ca.h`](ca.h)
 
-This is the header file which defines all functions contained in `ca.c` file, so they are readily accessable to files such as `main.c`.
+This is the header file which defines cellular automata structures and all functions contained in `ca.c` file, so they are readily accessable to files such as `main.c`.
 
 #### [`ca.c`](ca.c)
 
