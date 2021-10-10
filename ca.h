@@ -15,7 +15,7 @@ typedef struct ca_data {
 void init1DCA(CELLULAR_AUTOMATA*, int);
 int set1DCACell(CELLULAR_AUTOMATA*, unsigned int, unsigned char);
 void display1DCA(CELLULAR_AUTOMATA*);
-CELLULAR_AUTOMATA* create1DCA(int, unsigned char);
+CELLULAR_AUTOMATA* create1DCA(unsigned int, unsigned char);
 void stepCA(CELLULAR_AUTOMATA*, unsigned char (*)(CELLULAR_AUTOMATA*, int), int);
 
 #define CA_H_

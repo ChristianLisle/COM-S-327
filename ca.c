@@ -13,7 +13,7 @@ void init1DCA(CELLULAR_AUTOMATA* cellularAutomata, int initialValue) {
 }
 
 int set1DCACell(CELLULAR_AUTOMATA* cellularAutomata, unsigned int index, unsigned char value) {
-  if (index < 0 || cellularAutomata -> numCells <= index) {
+  if (cellularAutomata -> numCells <= index) {
     return 0;
   }
 
@@ -30,7 +30,7 @@ void display1DCA(CELLULAR_AUTOMATA* cellularAutomata) {
   printf("\n");
 }
 
-CELLULAR_AUTOMATA* create1DCA(int numCells, unsigned char initialState) {
+CELLULAR_AUTOMATA* create1DCA(unsigned int numCells, unsigned char initialState) {
   CELLULAR_AUTOMATA* cellularAutomata = malloc(sizeof(CELLULAR_AUTOMATA));
 
   if (!cellularAutomata) return NULL;

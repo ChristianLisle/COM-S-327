@@ -9,7 +9,7 @@ const unsigned int MAX_CELLS = 100;
 void printParameterInfo() {
   printf("\nThe expected parameters are:\n");
   printf("(1) Integer between 10 and 100 representing the number of cells in the 1DCA.\n");
-  printf("(2) Natural number representing the states possible for each cell.\n");
+  printf("(2) 1 or 2 representing the states possible for each cell.\n");
   printf("(3) Flag indicating whether the simulation wraps or not for edge cases.\n    Allowed values:\n    * wrap\n    * nowrap\n");
   printf("(4) Integer representing the initial state of cells.\n    Allowed values:\n    * 0 through (parameter 2 value - 1)\n    * -1 for randomly assigned number\n");
   printf("(5) Natural number representing the number of steps to simulate the 1DCA.\n");
@@ -33,7 +33,7 @@ int validateParameters(int argc, char *argv[]) {
     hasInvalidParameter = 1;
   }
 
-  if (parameter2 < 0) {
+  if (parameter2 < 1 || 2 < parameter2) {
     fprintf(stderr, "Invalid second parameter, \"%s\".\n", argv[2]);
     hasInvalidParameter = 1;
   }
@@ -130,5 +130,6 @@ int main(int argc, char *argv[]) {
     display1DCA(cellularAutomata);
   }
 
-  // TODO: determine if I need to free CA. Piazza @162
+  free(cellularAutomata -> cells);
+  free(cellularAutomata);
 }
