@@ -107,7 +107,7 @@ int main(int argc, char *argv[]) {
 
   const unsigned int numCells = atoi(argv[1]);
   const unsigned int possibleStates = atoi(argv[2]);
-  const unsigned int wrapFlag = argv[3] == "wrap";
+  const unsigned int wrapFlag = !strcmp("wrap", argv[3]);
   const int initialState = atoi(argv[4]);
   const unsigned int numSteps = atoi(argv[5]);
 
