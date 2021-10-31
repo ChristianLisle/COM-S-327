@@ -1,4 +1,4 @@
-# Cellular Automata & Sand Painting
+# Cellular Automata & Sand Painting (WORK IN PROGRESS)
 
 This program enables for constructing, manipulating, and displaying a one-dimensional [Cellular Automata](https://mathworld.wolfram.com/ElementaryCellularAutomaton.html) (1DCA).
 
@@ -11,21 +11,12 @@ View more about how the program works in [DEVELOPERS.md](DEVELOPERS.md).
 
 2. Run the program with 5 parameters
 
-        ./odca.out <1> <2> <3> <4> <5>
+        ./odca.out <1> <2>
 
 #### Parameters (required)
 ```
-(1) Integer between 10 and 100 representing the number of cells in the 1DCA.
-(2) 1 or 2 representing the states possible for each cell.
-(3) Flag indicating whether the simulation wraps or not for edge cases.
-    Allowed values:
-    * wrap
-    * nowrap
-(4) Integer representing the initial state of cells.
-    Allowed values:
-    * 0 through (parameter 2 value - 1)
-    * -1 for randomly assigned number
-(5) Natural number representing the number of steps to simulate the 1DCA.
+(1) Number of dimensions in CA (1 or 2)
+(2) Filename (include the path, if necessary) to a file that gives the dimensions and initial state of a 2-Dimensional CA. The format of this file is a text file that contains integers seperated by spaces or new lines. The first two numbers in the file are the number of rows and columns. The rest of data (rows * columns) is the initial state of the CA.
 ```
 
 ---

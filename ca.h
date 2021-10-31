@@ -5,18 +5,21 @@
 #endif
 
 typedef struct ca_data {
-  unsigned char* cells;
-  int numCells;
-  int possibleStates;
-  int wrapFlag;
-  unsigned char quiescentState;
+  unsigned char* cadata;
+  unsigned char dimension;
+  unsigned char wrap;
+  unsigned int width;
+  unsigned int height;
 } CELLULAR_AUTOMATA;
 
-void init1DCA(CELLULAR_AUTOMATA*, int);
+void initCA(CELLULAR_AUTOMATA*, int);
+void displayCA(CELLULAR_AUTOMATA*);
 int set1DCACell(CELLULAR_AUTOMATA*, unsigned int, unsigned char);
-void display1DCA(CELLULAR_AUTOMATA*);
-CELLULAR_AUTOMATA* create1DCA(unsigned int, unsigned char);
-void stepCA(CELLULAR_AUTOMATA*, unsigned char (*)(CELLULAR_AUTOMATA*, int), int);
+int set2DCACell(CELLULAR_AUTOMATA*, unsigned int, unsigned int, unsigned char);
+void step1DCA(CELLULAR_AUTOMATA*, unsigned char (*)(CELLULAR_AUTOMATA*, int));
+void step2DCA(CELLULAR_AUTOMATA*, unsigned char (*)(CELLULAR_AUTOMATA*, int, int));
+CELLULAR_AUTOMATA* create1DCA(int, unsigned char);
+CELLULAR_AUTOMATA* create2DCA(int, int, unsigned char);
 
 #define CA_H_
 #endif
