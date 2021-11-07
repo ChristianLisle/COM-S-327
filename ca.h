@@ -8,6 +8,8 @@ typedef struct ca_data {
   unsigned char* cadata;
   unsigned char dimension;
   unsigned char wrap;
+  unsigned char quiescentState;
+  unsigned int possibleStates;
   unsigned int width;
   unsigned int height;
 } CELLULAR_AUTOMATA;
