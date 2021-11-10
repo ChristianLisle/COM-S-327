@@ -4,7 +4,7 @@
 
 void printParameterInfo() {
   printf("\nThe expected parameters are:\n");
-  printf("(1) Number of dimensions in CA (1 or 2). MUST BE 2 for this program\n");
+  printf("(1) Number of dimensions in CA (Must be 2).\n");
   printf("(2) Filename (include the path, if necessary) to a file that gives the dimensions and initial state of a 2-Dimensional CA. The format of this file is a text file that contains integers seperated by spaces or new lines. The first two numbers in the file are the number of rows and columns. The rest of data (rows * columns) is the initial state of the CA.\n");
 }
 
@@ -42,7 +42,6 @@ int validateParameters(int argc, char *argv[]) {
 }
 
 unsigned char gameOfLifeRule(CELLULAR_AUTOMATA* ca, int x, int y) {
-  const unsigned char wrap = ca -> wrap;
   const unsigned int width = ca -> width;
   const unsigned int height = ca -> height;
   const unsigned char qState = ca -> quiescentState;
@@ -52,7 +51,7 @@ unsigned char gameOfLifeRule(CELLULAR_AUTOMATA* ca, int x, int y) {
 
   // set left x
   if (x == 0) {
-    if (wrap) {
+    if (ca -> wrap) {
       xLeft = width - 1;
     }
     else {
@@ -65,7 +64,7 @@ unsigned char gameOfLifeRule(CELLULAR_AUTOMATA* ca, int x, int y) {
 
   // set right x
   if (x == width - 1) {
-    if (wrap) {
+    if (ca -> wrap) {
       xRight = 0;
     }
     else {
@@ -78,7 +77,7 @@ unsigned char gameOfLifeRule(CELLULAR_AUTOMATA* ca, int x, int y) {
 
   // set above y
   if (y == 0) {
-    if (wrap) {
+    if (ca -> wrap) {
       yAbove = height - 1;
     }
     else {
@@ -91,7 +90,7 @@ unsigned char gameOfLifeRule(CELLULAR_AUTOMATA* ca, int x, int y) {
 
   // set below y
   if (y == height - 1) {
-    if (wrap) {
+    if (ca -> wrap) {
       yBelow = 0;
     }
     else {
@@ -140,7 +139,7 @@ unsigned char gameOfLifeRule(CELLULAR_AUTOMATA* ca, int x, int y) {
     belowRight = (ca -> cadata)[xRight + (yBelow * width)];
   }
 
-  // count alive neighbor cells
+  // Count alive neighboring cells
   unsigned int aliveNeighbors = 0;
   aliveNeighbors += (aboveLeft != 0);
   aliveNeighbors += (above != 0);
@@ -152,9 +151,8 @@ unsigned char gameOfLifeRule(CELLULAR_AUTOMATA* ca, int x, int y) {
   aliveNeighbors += (belowRight != 0);
 
   unsigned char currentCell = (ca -> cadata)[x + (y * width)];
-  unsigned int currentCellIsAlive = currentCell != 0;
 
-  if (currentCellIsAlive) {
+  if (currentCell != 0) {
     if (2 <= aliveNeighbors && aliveNeighbors <= 3) {
       return 1;
     }
@@ -176,7 +174,7 @@ int main(int argc, char *argv[]) {
   inputFile = fopen(argv[2], "r");
 
   if (!inputFile) {
-    fprintf(stderr, "There was an issue opening the File \"%s\".", argv[2]);
+    fprintf(stderr, "There was an issue opening the File \"%s\"\n", argv[2]);
     return 0;
   }
 
@@ -195,6 +193,7 @@ int main(int argc, char *argv[]) {
     }
   }
 
+  fclose(inputFile);
   displayCA(ca);
 
   unsigned char input;
