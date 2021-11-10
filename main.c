@@ -42,13 +42,129 @@ int validateParameters(int argc, char *argv[]) {
 }
 
 unsigned char gameOfLifeRule(CELLULAR_AUTOMATA* ca, int x, int y) {
-  if (ca -> wrap) {
-    // TODO
+  const unsigned char wrap = ca -> wrap;
+  const unsigned int width = ca -> width;
+  const unsigned int height = ca -> height;
+  const unsigned char qState = ca -> quiescentState;
 
+  unsigned int xLeft, xRight, yAbove, yBelow;
+  unsigned int left, right, above, below, aboveLeft, aboveRight, belowLeft, belowRight;
+
+  // set left x
+  if (x == 0) {
+    if (wrap) {
+      xLeft = width - 1;
+    }
+    else {
+      xLeft = -1; // use qState
+    }
   }
   else {
-    // TODO
+    xLeft = x - 1;
   }
+
+  // set right x
+  if (x == width - 1) {
+    if (wrap) {
+      xRight = 0;
+    }
+    else {
+      xRight = -1; // use qState
+    }
+  }
+  else {
+    xRight = x + 1;
+  }
+
+  // set above y
+  if (y == 0) {
+    if (wrap) {
+      yAbove = height - 1;
+    }
+    else {
+      yAbove = -1; // use qState
+    }
+  }
+  else {
+    yAbove = y - 1;
+  }
+
+  // set below y
+  if (y == height - 1) {
+    if (wrap) {
+      yBelow = 0;
+    }
+    else {
+      yBelow = -1; // use qState
+    }
+  }
+  else {
+    yBelow = y + 1;
+  }
+
+  // Adjacent sides
+  left = (xLeft == -1) ? qState : (ca -> cadata)[xLeft + (y * width)];
+  right = (xRight == -1) ? qState : (ca -> cadata)[xRight + (y * width)];
+  above = (yAbove == -1) ? qState : (ca -> cadata)[x + (yAbove * width)];
+  below = (yBelow == -1) ? qState : (ca -> cadata)[x + (yBelow * width)];
+
+  // top left
+  if (xLeft == -1 || yAbove == -1) {
+    aboveLeft = qState;
+  }
+  else {
+    aboveLeft = (ca -> cadata)[xLeft + (yAbove * width)];
+  }
+
+  // top right
+  if (xRight == -1 || yAbove == -1) {
+    aboveRight = qState;
+  }
+  else {
+    aboveRight = (ca -> cadata)[xRight + (yAbove * width)];
+  }
+
+  // bottom left
+  if (xLeft == -1 || yBelow == -1) {
+    belowLeft = qState;
+  }
+  else {
+    belowLeft = (ca -> cadata)[xLeft + (yBelow * width)];
+  }
+
+  // bottom right
+  if (xRight == -1 || yBelow == -1) {
+    belowRight = qState;
+  }
+  else {
+    belowRight = (ca -> cadata)[xRight + (yBelow * width)];
+  }
+
+  // count alive neighbor cells
+  unsigned int aliveNeighbors = 0;
+  aliveNeighbors += (aboveLeft != 0);
+  aliveNeighbors += (above != 0);
+  aliveNeighbors += (aboveRight != 0);
+  aliveNeighbors += (left != 0);
+  aliveNeighbors += (right != 0);
+  aliveNeighbors += (belowLeft != 0);
+  aliveNeighbors += (below != 0);
+  aliveNeighbors += (belowRight != 0);
+
+  unsigned char currentCell = (ca -> cadata)[x + (y * width)];
+  unsigned int currentCellIsAlive = currentCell != 0;
+
+  if (currentCellIsAlive) {
+    if (2 <= aliveNeighbors && aliveNeighbors <= 3) {
+      return 1;
+    }
+
+    return 0;
+  }
+  else if (aliveNeighbors == 3) {
+    return 1;
+  }
+
   return 0;
 }
 
@@ -68,7 +184,7 @@ int main(int argc, char *argv[]) {
   fscanf(inputFile, "%d %d", &height, &width);
 
   CELLULAR_AUTOMATA* ca = create2DCA(width, height, '0');
-  ca -> wrap = ""; // TODO: FIGURE OUT WHAT TO SET THIS TO!!!! SEE PIAZZA @256
+  ca -> wrap = 1;
 
   for (int y = 0; y < height; y++) {
     for (int x = 0; x < width; x++) {
