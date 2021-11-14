@@ -1,4 +1,4 @@
-# Cellular Automata & Sand Painting
+# Cellular Automata & Sand Painting (WIP)
 
 This program enables for constructing, manipulating, and displaying a two-dimensional [Cellular Automata](https://mathworld.wolfram.com/ElementaryCellularAutomaton.html) (2DCA). The program allows a user to view the 2DCA through any number of steps of the [Game of Life rule](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life).
 
