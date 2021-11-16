@@ -1,8 +1,10 @@
 #include "GraphicsClient.h"
 #include <sys/socket.h>
 #include <stdlib.h>
+#include <arpa/inet.h>
 #include <stdio.h>
 #include <string>
+#include <unistd.h>
 
 GraphicsClient::GraphicsClient(std::string connectionUrl, int connectionPort) {
   url = connectionUrl;
@@ -11,10 +13,24 @@ GraphicsClient::GraphicsClient(std::string connectionUrl, int connectionPort) {
 
   if (socketId < 0) {
     fprintf(stderr, "Error occured creating socket\n");
-    // TODO: exit program or something here?
+    // TODO: exit program/constructor or something here?
   }
 
-  // if (inet_pton(AF_INET, url, ))
+  memset(&serv_addr, '0', sizeof(serv_addr));
+
+  serv_addr.sin_family = AF_INET;
+  serv_addr.sin_port = htons(port);
+
+  // TODO: does this need to be the given connectionUrl/url or is it hardcoded like so?
+  if (inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr)<=0) {
+    fprintf(stderr, "Invalid connection address provided.\n");
+    // TODO: exit constructor or something
+  }
+
+  if (connect(socketId, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
+    fprintf(stderr, "Connection failed.\n");
+    // TODO: exit constructor or something
+  }
 }
 
 GraphicsClient::GraphicsClient(GraphicsClient &other) {
@@ -22,20 +38,16 @@ GraphicsClient::GraphicsClient(GraphicsClient &other) {
 }
 
 GraphicsClient::~GraphicsClient() {
-  // TODO:
-  // close connection and such
+  // TODO: close connection and such
+  close(socketId);
 };
 
 void GraphicsClient::operator=(const GraphicsClient rhs) {
-  // TODO
   // close existing connection
-  
+  close(socketId);
   
   // create new connection with parameters from rhs
-  url = rhs.url;
-  port = rhs.port;
-
-  // CREATE CONNECTION
+  GraphicsClient(rhs.url, rhs.port);
 };
 
 void GraphicsClient::setBackgroundColor(int, int, int) {

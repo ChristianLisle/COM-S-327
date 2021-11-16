@@ -1,5 +1,6 @@
 #include <string>
 #include <sys/socket.h>
+#include <arpa/inet.h>
 
 #ifndef GRAPHICS_CLIENT_
 #define GRAPHICS_CLIENT_
@@ -9,11 +10,12 @@ class GraphicsClient {
     std::string url;
     int port;
     int socketId;
+    struct sockaddr_in serv_addr;
   public:
     GraphicsClient(std::string, int);
     GraphicsClient(GraphicsClient&);
-    GraphicsClient::~GraphicsClient();
-    void GraphicsClient::operator=(const GraphicsClient);
+    ~GraphicsClient();
+    void operator=(const GraphicsClient);
     void setBackgroundColor(int, int, int);
     void setDrawingColor(int, int, int);
     void clear();
