@@ -1,13 +1,13 @@
-// #include <stdio.h>
-// #include <stdlib.h>
-// #include <sys/socket.h>
-// #include <arpa/inet.h>
-// #include <unistd.h>
-// #include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <string.h>
 #include "GraphicsClient.h"
 
 int main(void) {
-    GraphicsClient x = new GraphicsClient("127.0.0.1", 7777);
+    GraphicsClient* x = new GraphicsClient("127.0.0.1", 7777);
 }
 
 // int main(void)

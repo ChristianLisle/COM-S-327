@@ -1,5 +1,5 @@
-app: main.c ca.c ca.h
-	gcc main.c ca.c ca.h -o gol
+app: main.cpp GraphicsClient.cpp GraphicsClient.h
+	g++ main.cpp GraphicsClient.cpp
 
-dca1d.c: ca.h
-	gcc -c ca.c
+GraphicsClient.cpp: GraphicsClient.h
+	g++ -c GraphicsClient.cpp

@@ -1,18 +1,21 @@
 #include <string>
+#include <cstring>
 #include <sys/socket.h>
 #include <arpa/inet.h>
 
 #ifndef GRAPHICS_CLIENT_
 #define GRAPHICS_CLIENT_
 
+using namespace std;
+
 class GraphicsClient {
   private:
-    std::string url;
+    string url;
     int port;
     int socketId;
     struct sockaddr_in serv_addr;
   public:
-    GraphicsClient(std::string, int);
+    GraphicsClient(string, int);
     GraphicsClient(GraphicsClient&);
     ~GraphicsClient();
     void operator=(const GraphicsClient);
@@ -26,7 +29,7 @@ class GraphicsClient {
     void drawOval(int, int, int, int);
     void fillOval(int, int, int, int);
     void drawLine(int, int, int, int);
-    void drawString(int, int, std::string);
+    void drawString(int, int, string);
     void repaint();
 };
 
