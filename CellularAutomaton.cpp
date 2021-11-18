@@ -4,16 +4,16 @@
 #include "GraphicsClient.h"
 #include "CellularAutomaton.h"
 
-int setCell(unsigned char* cells, unsigned int x, unsigned int y, unsigned char state) {
-  unsigned int index = x + (y * width);
-  if (width * height <= index) {
-    return 0;
-  }
+// int setCell(unsigned char* cells, unsigned int x, unsigned int y, unsigned char state) {
+//   unsigned int index = x + (y * width);
+//   if (width * height <= index) {
+//     return 0;
+//   }
 
-  cells[index] = state;
+//   cells[index] = state;
 
-  return 1;
-}
+//   return 1;
+// }
 
 CellularAutomaton::CellularAutomaton(string filename, int qState) {
   file = filename;
