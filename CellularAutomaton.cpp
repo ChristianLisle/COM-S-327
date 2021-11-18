@@ -4,17 +4,6 @@
 #include "GraphicsClient.h"
 #include "CellularAutomaton.h"
 
-// int setCell(unsigned char* cells, unsigned int x, unsigned int y, unsigned char state) {
-//   unsigned int index = x + (y * width);
-//   if (width * height <= index) {
-//     return 0;
-//   }
-
-//   cells[index] = state;
-
-//   return 1;
-// }
-
 CellularAutomaton::CellularAutomaton(string filename, int qState) {
   file = filename;
   quiescentState = qState;
@@ -30,6 +19,7 @@ CellularAutomaton::CellularAutomaton(string filename, int qState) {
   }
 
   fscanf(inputFile, "%d %d", &height, &width);
+  fprintf(stdout, "width: %d\nheight: %d\n", width, height);
 
   // Create CA
   cadata = (unsigned char *) malloc(width * height * sizeof(unsigned char));
@@ -45,7 +35,7 @@ CellularAutomaton::CellularAutomaton(string filename, int qState) {
       unsigned int state;
       fscanf(inputFile, "%d", &state);
 
-      setCell(cadata, x, y, state);
+      setCell(x, y, state);
     }
   }
 
@@ -64,10 +54,58 @@ void CellularAutomaton::operator=(const CellularAutomaton rhs) {
   CellularAutomaton(rhs.file, rhs.quiescentState);
 }
 
-void step(unsigned char (*rule)(CellularAutomaton*, int x, int y)) {
-  // TODO
+void CellularAutomaton::step(unsigned char (*rule)(CellularAutomaton*, int x, int y)) {
+  unsigned char* newCells = (unsigned char*) malloc(width * height * sizeof(unsigned char));
+
+  if (!newCells) {
+    fprintf(stderr, "Unable to perform a step on the CA.\n");
+  }
+
+  for (int y = 0; y < height; y++) {
+    for (int x = 0; x < width; x++) {
+      newCells[x + (y * width)] = (*rule)(this, x, y);
+    }
+  }
+
+  free(cadata);
+
+  cadata = newCells;
 }
 
-void displayCA(GraphicsClient &client) {
-  // TODO
+void CellularAutomaton::displayCA(GraphicsClient &client) {
+  int m = max(width, height);
+  int cellSize, gapSize;
+
+  if (200 < m && m <= 600) {
+    cellSize = 1;
+    gapSize= 0;
+  }
+  else if (100 < m && m <= 200) {
+    cellSize = 2;
+    gapSize= 1;
+  }
+  else if (50 < m && m <= 100) {
+    cellSize = 4;
+    gapSize= 1;
+  }
+  else if (1 < m && m <= 50) {
+    cellSize = 10;
+    gapSize= 2;
+  }
+  else {
+    fprintf(stderr, "There was an issue displaying the Cellular Automata.\n");
+    return;
+  }
+
+  client.drawRectangle(0, 0, (width * (cellSize + gapSize)), (height * (cellSize + gapSize)));
+
+  for (int x = 0; x < width; x++) {
+    for (int y = 0; y < height; y++) {
+      int xCoord = x * (cellSize + gapSize);
+      int yCoord = y * (cellSize + gapSize);
+      if (getCell(x, y) == 1) {
+        client.fillRectangle(xCoord, yCoord, cellSize, cellSize);
+      }
+    }
+  }
 }

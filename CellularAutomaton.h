@@ -15,16 +15,12 @@ class CellularAutomaton {
     unsigned int width;
     unsigned int height;
     string file;
-    int setCell(unsigned char* cells, unsigned int x, unsigned int y, unsigned char state) {
-      unsigned int index = x + (y * width);
-      if (width * height <= index) {
-        return 0;
-      }
-
-      cells[index] = state;
-
-      return 1;
-    }
+    void setCell(unsigned int x, unsigned int y, unsigned char state) {
+      cadata[x + (y * width)] = state;
+    };
+    unsigned char getCell(unsigned int x, unsigned int y) {
+      return cadata[x + (y * width)];
+    };
   public:
     CellularAutomaton(string, int);
     CellularAutomaton(CellularAutomaton&);
