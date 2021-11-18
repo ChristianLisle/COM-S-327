@@ -4,6 +4,8 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <string.h>
+#include <cstring>
+
 #include <iostream>
 #include "GraphicsClient.h"
 #include "CellularAutomaton.h"
