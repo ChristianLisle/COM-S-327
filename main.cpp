@@ -4,65 +4,99 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <string.h>
+#include <iostream>
 #include "GraphicsClient.h"
 
 int main(void) {
     GraphicsClient* x = new GraphicsClient("127.0.0.1", 7777);
+    
+    x -> repaint();
+    x -> drawString(120, 120, "DEFAULT");
+
+
+    cin.get();
+    x -> clear();
+    x -> repaint();
+
+
+    x -> setBackgroundColor(150, 150, 150);
+    x -> clear();
+    x -> drawString(120, 120, "SETTING BACKGROUND COLOR");
+    x -> repaint();
+
+
+    cin.get();
+    x -> clear();
+    x -> repaint();
+
+
+    x -> setDrawingColor(0, 0, 0);
+    x -> clear();
+    x -> repaint();
+    x -> drawString(120, 120, "SETTING DRAWING COLOR (set to black)");
+    x -> repaint();
+
+
+    cin.get();
+    x -> clear();
+    x -> repaint();
+
+
+    x -> drawString(120, 120, "DRAWING LINE");
+    x -> drawLine(120, 122, 210, 122);
+    x -> repaint();
+
+
+    cin.get();
+    x -> clear();
+    x -> repaint();
+    
+
+    x -> setPixel(140, 140, 0, 0, 0);
+    x -> setPixel(141, 141, 0, 0, 0);
+    x -> setPixel(142, 142, 0, 0, 0);
+    x -> setPixel(143, 143, 0, 0, 0);
+    x -> setPixel(144, 144, 0, 0, 0);
+    x -> drawString(120, 120, "SETTING PIXELS");
+    x -> repaint();
+
+
+    cin.get();
+    x -> clear();
+    x -> repaint();
+
+
+    x -> drawRectangle(225, 225, 100, 100);
+    x -> fillRectangle(500, 225, 100, 100);
+    x -> drawString(120, 120, "DRAWING & FILLING RECTANGLES");
+    x -> repaint();
+
+
+    cin.get();
+
+    x -> clearRectangle(525, 250, 50, 50);
+    x -> clearRectangle(100, 100, 400, 40);
+    x -> clearRectangle(225, 225, 100, 100);
+    x -> drawString(120, 120, "CLEARING RECTANGLES");
+    x -> repaint();
+
+    cin.get();
+    x -> clear();
+    x -> repaint();    
+
+    x -> drawOval(225, 225, 100, 100);
+    x -> fillOval(500, 225, 100, 100);
+    x -> repaint();
+    x -> drawString(120, 120, "DRAWING & FILLING OVALS");
+    x -> repaint();
+
+   
+
+    cin.get();
+    x -> clear();
+
+    // GraphicsClient* y = new GraphicsClient("127.0.0.1", 7777);
+    // y -> setBackgroundColor(160, 58, 79);
+    // y -> clear();
+    // x -> repaint();
 }
-
-// int main(void)
-// {
-//     int sockfd = socket(AF_INET, SOCK_STREAM, 0); //
-//     if (sockfd < 0) //
-//     {
-//         fprintf( stderr, "Error creating socket\n"); //
-//         exit(-1); //
-//     }
-
-//     struct sockaddr_in serv_addr; //
-//     memset(&serv_addr, '0', sizeof(serv_addr)); //
-
-//     serv_addr.sin_family = AF_INET; //
-//     serv_addr.sin_port = htons(7777); //
-
-//     if(inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr)<=0) //
-//     {
-//         fprintf(stderr, "Invalid address/ Address not supported \n"); //
-//         return -1; //
-//     }
-
-//     if (connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) //
-//     {
-//         fprintf(stderr, "Connection Failed \n"); //
-//         return -1; //
-//     }
-
-//     char message[100];
-
-//     message[0] = 0xFF;
-//     message[1] = 0x00;
-//     message[2] = 0x00;
-//     message[3] = 0x00;
-//     message[4] = 0x07;
-//     message[5] = 0x02;
-//     message[6] = 0x00;
-//     message[7] = 0x05;
-//     message[8] = 0x0F;
-//     message[9] = 0x0F;
-//     message[10] = 0x00;
-//     message[11] = 0x00;
-
-//     send(sockfd, message, 12, 0);
-
-//     message[4] = 0x01;
-//     message[5] = 0x01;
-//     send(sockfd, message, 6, 0);
-
-//     message[5] = 0x0C;
-//     send( sockfd, message, 6, 0);
-
-
-//     close(sockfd);
-
-//     return EXIT_SUCCESS;
-// }
