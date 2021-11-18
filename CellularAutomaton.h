@@ -31,7 +31,7 @@ class CellularAutomaton {
     ~CellularAutomaton();
     void operator=(const CellularAutomaton);
     void step(unsigned char (*rule)(CellularAutomaton*, int, int));
-    void display(GraphicsClient);
+    void displayCA(GraphicsClient&);
 };
 
 #endif

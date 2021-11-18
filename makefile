@@ -1,5 +1,5 @@
-app: main.cpp GraphicsClient.cpp GraphicsClient.h CellularAutomaton.cpp CellularAutomaton.h
-	g++ main.cpp GraphicsClient.cpp
+app: main.cpp GraphicsClient.cpp CellularAutomaton.cpp
+	g++ main.cpp GraphicsClient.cpp CellularAutomaton.cpp
 
 GraphicsClient.cpp: GraphicsClient.h
 	g++ -c GraphicsClient.cpp

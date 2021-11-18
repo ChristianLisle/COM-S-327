@@ -14,8 +14,12 @@ using namespace std;
 
 
 int main(int argc, char *argv[]) {
+	// TODO: validate parameters
 	string filename = argv[1];
 	CellularAutomaton* ca = new CellularAutomaton(filename, 0);
+
+	GraphicsClient* x = new GraphicsClient("127.0.0.1", 7777);
+	ca -> displayCA(*x);
 
 }
 

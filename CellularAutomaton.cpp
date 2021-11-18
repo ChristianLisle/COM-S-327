@@ -32,7 +32,7 @@ CellularAutomaton::CellularAutomaton(string filename, int qState) {
   fscanf(inputFile, "%d %d", &height, &width);
 
   // Create CA
-  cadata = malloc(width * height * sizeof(unsigned char));
+  cadata = (unsigned char *) malloc(width * height * sizeof(unsigned char));
 
   if (!cadata) {
     fprintf(stderr, "There was an issue creating the Cellular Automata.\n");
@@ -50,8 +50,6 @@ CellularAutomaton::CellularAutomaton(string filename, int qState) {
   }
 
   fclose(inputFile);
-
-
 }
 
 CellularAutomaton::CellularAutomaton(CellularAutomaton &other) {
@@ -70,6 +68,6 @@ void step(unsigned char (*rule)(CellularAutomaton*, int x, int y)) {
   // TODO
 }
 
-void display(GraphicsClient client) {
+void displayCA(GraphicsClient &client) {
   // TODO
 }
