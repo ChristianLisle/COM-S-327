@@ -8,19 +8,13 @@ using namespace std;
 
 class CellularAutomaton {
   private:
-    unsigned char* cadata;
+    unsigned char* cells;
     unsigned char wrap;
     unsigned char quiescentState;
-    unsigned int possibleStates;
+    unsigned int possibleStates; // TODO: is this needed?
     unsigned int width;
     unsigned int height;
     string file;
-    void setCell(unsigned int x, unsigned int y, unsigned char state) {
-      cadata[x + (y * width)] = state;
-    };
-    unsigned char getCell(unsigned int x, unsigned int y) {
-      return cadata[x + (y * width)];
-    };
   public:
     CellularAutomaton(string, int);
     CellularAutomaton(CellularAutomaton&);
@@ -28,6 +22,12 @@ class CellularAutomaton {
     void operator=(const CellularAutomaton);
     void step(unsigned char (*rule)(CellularAutomaton*, int, int));
     void displayCA(GraphicsClient&);
+    unsigned char* getCells() { return cells; };
+    unsigned char getWrap() { return wrap; };
+    unsigned char getQuiescentState() { return quiescentState; };
+    unsigned int getPossibleStates() { return possibleStates; }; // TODO: is this needed?
+    unsigned int getWidth() { return width; };
+    unsigned int getHeight() { return height; };
 };
 
 #endif

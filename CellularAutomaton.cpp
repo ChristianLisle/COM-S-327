@@ -22,9 +22,9 @@ CellularAutomaton::CellularAutomaton(string filename, int qState) {
   fprintf(stdout, "width: %d\nheight: %d\n", width, height);
 
   // Create CA
-  cadata = (unsigned char *) malloc(width * height * sizeof(unsigned char));
+  cells = (unsigned char *) malloc(width * height * sizeof(unsigned char));
 
-  if (!cadata) {
+  if (!cells) {
     fprintf(stderr, "There was an issue creating the Cellular Automata.\n");
     return;
   }
@@ -35,7 +35,7 @@ CellularAutomaton::CellularAutomaton(string filename, int qState) {
       unsigned int state;
       fscanf(inputFile, "%d", &state);
 
-      setCell(x, y, state);
+      cells[x + (y * width)] = state;
     }
   }
 
@@ -67,9 +67,9 @@ void CellularAutomaton::step(unsigned char (*rule)(CellularAutomaton*, int x, in
     }
   }
 
-  free(cadata);
+  free(cells);
 
-  cadata = newCells;
+  cells = newCells;
 }
 
 void CellularAutomaton::displayCA(GraphicsClient &client) {
@@ -103,7 +103,7 @@ void CellularAutomaton::displayCA(GraphicsClient &client) {
     for (int y = 0; y < height; y++) {
       int xCoord = x * (cellSize + gapSize);
       int yCoord = y * (cellSize + gapSize);
-      if (getCell(x, y) == 1) {
+      if (cells[x + (y * width)] == 1) {
         client.fillRectangle(xCoord, yCoord, cellSize, cellSize);
       }
     }
