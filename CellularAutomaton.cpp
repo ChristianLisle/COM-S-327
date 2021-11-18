@@ -9,17 +9,15 @@ CellularAutomaton::CellularAutomaton(string filename, int qState) {
   quiescentState = qState;
   wrap = 1;
 
-  // TODO: validate filename
   FILE* inputFile;
   inputFile = fopen(file.c_str(), "r");
 
   if (!inputFile) {
-    fprintf(stderr, "There was an issue opening the File \"%s\"\n", file.c_str());
+    fprintf(stderr, "There was an issue opening the file \"%s\"\n", file.c_str());
     return;
   }
 
   fscanf(inputFile, "%d %d", &height, &width);
-  fprintf(stdout, "width: %d\nheight: %d\n", width, height);
 
   // Create CA
   cells = (unsigned char *) malloc(width * height * sizeof(unsigned char));
@@ -47,7 +45,7 @@ CellularAutomaton::CellularAutomaton(CellularAutomaton &other) {
 }
 
 CellularAutomaton::~CellularAutomaton() {
-  // TODO
+  free(cells);
 }
 
 void CellularAutomaton::operator=(const CellularAutomaton rhs) {
@@ -59,6 +57,7 @@ void CellularAutomaton::step(unsigned char (*rule)(CellularAutomaton*, int x, in
 
   if (!newCells) {
     fprintf(stderr, "Unable to perform a step on the CA.\n");
+    return;
   }
 
   for (int y = 0; y < height; y++) {
@@ -93,14 +92,15 @@ void CellularAutomaton::displayCA(GraphicsClient &client) {
     gapSize= 2;
   }
   else {
-    fprintf(stderr, "There was an issue displaying the Cellular Automata.\n");
+    fprintf(stderr, "The Cellular Automata has a width or height that cannot be displayed.\n");
     return;
   }
 
+  client.clear();
   client.drawRectangle(0, 0, (width * (cellSize + gapSize)), (height * (cellSize + gapSize)));
 
-  for (int x = 0; x < width; x++) {
-    for (int y = 0; y < height; y++) {
+  for (int y = 0; y < height; y++) {
+    for (int x = 0; x < width; x++) {
       int xCoord = x * (cellSize + gapSize);
       int yCoord = y * (cellSize + gapSize);
       if (cells[x + (y * width)] == 1) {
@@ -108,4 +108,5 @@ void CellularAutomaton::displayCA(GraphicsClient &client) {
       }
     }
   }
+  client.repaint();
 }

@@ -11,7 +11,6 @@ class CellularAutomaton {
     unsigned char* cells;
     unsigned char wrap;
     unsigned char quiescentState;
-    unsigned int possibleStates; // TODO: is this needed?
     unsigned int width;
     unsigned int height;
     string file;
@@ -25,7 +24,6 @@ class CellularAutomaton {
     unsigned char* getCells() { return cells; };
     unsigned char getWrap() { return wrap; };
     unsigned char getQuiescentState() { return quiescentState; };
-    unsigned int getPossibleStates() { return possibleStates; }; // TODO: is this needed?
     unsigned int getWidth() { return width; };
     unsigned int getHeight() { return height; };
 };
