@@ -18,8 +18,7 @@ void convertInt2Byte(int v, char* buff, int index) {
 void convertInt4Byte(int v, char* buff, int index) {
   buff[index] = (v >> 12) & 0x0F;
   buff[index + 1] = (v >> 8) & 0x0F;
-  buff[index + 2] = (v >> 4) & 0x0F;
-  buff[index + 3] = v & 0x0F;
+  convertInt2Byte(v, buff, index + 2);
 }
 
 void preformatMessage(char* message, int payloadSize, int type) {
@@ -35,24 +34,22 @@ GraphicsClient::GraphicsClient(string connectionUrl, int connectionPort) {
 
   if (socketId < 0) {
     fprintf(stderr, "Error occured creating socket\n");
-    // TODO: exit constructor or something
+    return;
   }
 
   memset(&serv_addr, '0', sizeof(serv_addr));
 
   serv_addr.sin_family = AF_INET;
-  // serv_addr.sin_port = htons(port);
-  serv_addr.sin_port = htons(7777);
+  serv_addr.sin_port = htons(port);
 
-  // TODO: does this need to be the given connectionUrl/url or is it hardcoded like so?
-  if (inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr)<=0) {
+  if (inet_pton(AF_INET, connectionUrl.c_str(), &serv_addr.sin_addr)<=0) {
     fprintf(stderr, "Invalid connection address provided.\n");
-    // TODO: exit constructor or something
+    return;
   }
 
   if (connect(socketId, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
     fprintf(stderr, "Connection failed.\n");
-    // TODO: exit constructor or something
+    return;
   }
 }
 
