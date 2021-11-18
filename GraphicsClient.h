@@ -1,6 +1,4 @@
 #include <string>
-#include <cstring>
-#include <sys/socket.h>
 #include <arpa/inet.h>
 
 #ifndef GRAPHICS_CLIENT_
@@ -26,7 +24,7 @@ class GraphicsClient {
   private:
     string url;
     int port;
-    int socketId;
+    int sockfd;
     struct sockaddr_in serv_addr;
   public:
     GraphicsClient(string, int);

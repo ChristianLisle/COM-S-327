@@ -1,12 +1,5 @@
 #include "GraphicsClient.h"
-#include <sys/socket.h>
-#include <stdlib.h>
-#include <arpa/inet.h>
-#include <stdio.h>
-#include <string>
-#include <cstring>
 #include <unistd.h>
-#include <iostream>
 
 using namespace std;
 
@@ -30,9 +23,9 @@ void preformatMessage(char* message, int payloadSize, int type) {
 GraphicsClient::GraphicsClient(string connectionUrl, int connectionPort) {
   url = connectionUrl;
   port = connectionPort;
-  socketId = socket(AF_INET, SOCK_STREAM, 0);
+  sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
-  if (socketId < 0) {
+  if (sockfd < 0) {
     fprintf(stderr, "Error occured creating socket\n");
     return;
   }
@@ -47,7 +40,7 @@ GraphicsClient::GraphicsClient(string connectionUrl, int connectionPort) {
     return;
   }
 
-  if (connect(socketId, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
+  if (connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
     fprintf(stderr, "Connection failed.\n");
     return;
   }
@@ -58,13 +51,12 @@ GraphicsClient::GraphicsClient(GraphicsClient &other) {
 }
 
 GraphicsClient::~GraphicsClient() {
-  // TODO: close connection and such
-  close(socketId);
+  close(sockfd);
 }
 
 void GraphicsClient::operator=(const GraphicsClient rhs) {
   // close existing connection
-  close(socketId);
+  close(sockfd);
   
   // create new connection with parameters from rhs
   GraphicsClient(rhs.url, rhs.port);
@@ -77,7 +69,7 @@ void GraphicsClient::setBackgroundColor(int r, int g, int b) {
   convertInt2Byte(g, message, 8);
   convertInt2Byte(b, message, 10);
 
-  send(socketId, message, 12, 0);
+  send(sockfd, message, 12, 0);
 }
 
 void GraphicsClient::setDrawingColor(int r, int g, int b) {
@@ -87,14 +79,14 @@ void GraphicsClient::setDrawingColor(int r, int g, int b) {
   convertInt2Byte(g, message, 8);
   convertInt2Byte(b, message, 10);
 
-  send(socketId, message, 12, 0);
+  send(sockfd, message, 12, 0);
 }
 
 void GraphicsClient::clear() {
   char message[6];
   preformatMessage(message, 1, CLEAR);
 
-  send(socketId, message, 6, 0);
+  send(sockfd, message, 6, 0);
 }
 
 void GraphicsClient::setPixel(int x, int y, int r, int g, int b) {
@@ -106,7 +98,7 @@ void GraphicsClient::setPixel(int x, int y, int r, int g, int b) {
   convertInt2Byte(g, message, 16);
   convertInt2Byte(b, message, 18);
 
-  send(socketId, message, 20, 0);
+  send(sockfd, message, 20, 0);
 }
 
 void GraphicsClient::drawRectangle(int x, int y, int width, int height) {
@@ -117,7 +109,7 @@ void GraphicsClient::drawRectangle(int x, int y, int width, int height) {
   convertInt4Byte(width, message, 14);
   convertInt4Byte(height, message, 18);
 
-  send(socketId, message, 22, 0);
+  send(sockfd, message, 22, 0);
 }
 
 void GraphicsClient::fillRectangle(int x, int y, int width, int height) {
@@ -128,7 +120,7 @@ void GraphicsClient::fillRectangle(int x, int y, int width, int height) {
   convertInt4Byte(width, message, 14);
   convertInt4Byte(height, message, 18);
 
-  send(socketId, message, 22, 0);
+  send(sockfd, message, 22, 0);
 }
 
 void GraphicsClient::clearRectangle(int x, int y, int width, int height) {
@@ -139,7 +131,7 @@ void GraphicsClient::clearRectangle(int x, int y, int width, int height) {
   convertInt4Byte(width, message, 14);
   convertInt4Byte(height, message, 18);
 
-  send(socketId, message, 22, 0);
+  send(sockfd, message, 22, 0);
 }
 
 void GraphicsClient::drawOval(int x, int y, int width, int height) {
@@ -150,7 +142,7 @@ void GraphicsClient::drawOval(int x, int y, int width, int height) {
   convertInt4Byte(width, message, 14);
   convertInt4Byte(height, message, 18);
 
-  send(socketId, message, 22, 0);
+  send(sockfd, message, 22, 0);
 }
 
 void GraphicsClient::fillOval(int x, int y, int width, int height) {
@@ -161,7 +153,7 @@ void GraphicsClient::fillOval(int x, int y, int width, int height) {
   convertInt4Byte(width, message, 14);
   convertInt4Byte(height, message, 18);
 
-  send(socketId, message, 22, 0);
+  send(sockfd, message, 22, 0);
 }
 
 void GraphicsClient::drawLine(int x1, int y1, int x2, int y2) {
@@ -172,7 +164,7 @@ void GraphicsClient::drawLine(int x1, int y1, int x2, int y2) {
   convertInt4Byte(x2, message, 14);
   convertInt4Byte(y2, message, 18);
 
-  send(socketId, message, 22, 0);
+  send(sockfd, message, 22, 0);
 }
 
 void GraphicsClient::drawString(int x, int y, string characters) {
@@ -188,11 +180,11 @@ void GraphicsClient::drawString(int x, int y, string characters) {
     convertInt2Byte(characters[i], message, 14 + (i * 2));
   }
 
-  send(socketId, message, messageSize, 0);
+  send(sockfd, message, messageSize, 0);
 }
 
 void GraphicsClient::repaint() {
   char message[6];
   preformatMessage(message, 1, REPAINT);
-  send(socketId, message, 6, 0);
+  send(sockfd, message, 6, 0);
 }

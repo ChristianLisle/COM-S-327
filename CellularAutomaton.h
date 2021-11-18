@@ -1,4 +1,3 @@
-#include <string>
 #include "GraphicsClient.h"
 
 #ifndef CELLULAR_AUTOMATAON_
