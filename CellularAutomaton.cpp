@@ -19,7 +19,6 @@ CellularAutomaton::CellularAutomaton(string filename, int qState) {
 
   fscanf(inputFile, "%d %d", &height, &width);
 
-  // Create CA
   cells = (unsigned char *) malloc(width * height * sizeof(unsigned char));
 
   if (!cells) {
@@ -27,7 +26,6 @@ CellularAutomaton::CellularAutomaton(string filename, int qState) {
     return;
   }
 
-  // Fill CA
   for (int y = 0; y < height; y++) {
     for (int x = 0; x < width; x++) {
       unsigned int state;
