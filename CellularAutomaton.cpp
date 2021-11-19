@@ -50,7 +50,7 @@ void CellularAutomaton::operator=(const CellularAutomaton rhs) {
   CellularAutomaton(rhs.file, rhs.quiescentState);
 }
 
-void CellularAutomaton::step(unsigned char (*rule)(CellularAutomaton*, int x, int y)) {
+void CellularAutomaton::step(unsigned char (*rule)(CellularAutomaton*, int, int)) {
   unsigned char* newCells = (unsigned char*) malloc(width * height * sizeof(unsigned char));
 
   if (!newCells) {
