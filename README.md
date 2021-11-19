@@ -5,13 +5,24 @@ This program enables for constructing, manipulating, and displaying a two-dimens
 View more about how the program works in [DEVELOPERS.md](DEVELOPERS.md).
 
 ### Running the program
+
+1. Start the Graphics Server
+
+```bash
+java -jar GraphicsServer.jar
+```
+
 1. Compile the program
 
-        make
+```bash
+make
+```
 
-2. Run the program with 1 parameter
+3. Run the program with 1 parameter
 
-        ./a.out <1>
+```bash
+./a.out <1>
+```
 
 #### Parameters (required)
 ```
