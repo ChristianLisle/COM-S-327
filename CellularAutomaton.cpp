@@ -19,7 +19,7 @@ CellularAutomaton::CellularAutomaton(string filename, int qState) {
 
   fscanf(inputFile, "%d %d", &height, &width);
 
-  cells = (unsigned char *) malloc(width * height * sizeof(unsigned char));
+  cells = new unsigned char[width * height];
 
   if (!cells) {
     fprintf(stderr, "There was an issue creating the Cellular Automata.\n");
@@ -43,7 +43,7 @@ CellularAutomaton::CellularAutomaton(CellularAutomaton &other) {
 }
 
 CellularAutomaton::~CellularAutomaton() {
-  free(cells);
+  delete cells;
 }
 
 void CellularAutomaton::operator=(const CellularAutomaton rhs) {
@@ -51,7 +51,7 @@ void CellularAutomaton::operator=(const CellularAutomaton rhs) {
 }
 
 void CellularAutomaton::step(unsigned char (*rule)(CellularAutomaton*, int, int)) {
-  unsigned char* newCells = (unsigned char*) malloc(width * height * sizeof(unsigned char));
+  unsigned char* newCells = new unsigned char[width * height];
 
   if (!newCells) {
     fprintf(stderr, "Unable to perform a step on the CA.\n");
@@ -64,7 +64,7 @@ void CellularAutomaton::step(unsigned char (*rule)(CellularAutomaton*, int, int)
     }
   }
 
-  free(cells);
+  delete cells;
 
   cells = newCells;
 }
