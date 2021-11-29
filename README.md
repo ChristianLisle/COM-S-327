@@ -21,7 +21,7 @@ make
 3. Run the program with 1 parameter
 
 ```bash
-./a.out <1>
+./simulator.out <1>
 ```
 
 #### Parameters (required)

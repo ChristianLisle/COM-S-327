@@ -1,35 +1,16 @@
 #include <stdio.h>
-#include <string.h>
 #include <iostream>
-#include "GraphicsClient.h"
 #include "CellularAutomaton.h"
+#include "Simulator.h"
 
 using namespace std;
 
 void printParameterInfo() {
-  printf("\nThe expected parameters are:\n");
-  printf("(1) Filename (include the path, if necessary) to a file that gives the dimensions and initial state of a 2-Dimensional CA. The format of this file is a text file that contains integers seperated by spaces or new lines. The first two numbers in the file are the number of rows and columns. The rest of data (rows * columns) is the initial state of the CA.\n");
+  // TODO
 }
 
 int validateParameters(int argc, char *argv[]) {
-  if (argc != 2) {
-    fprintf(stderr, "This program expects 1 parameter, but %d parameters were passed in.\n", (argc - 1));
-    printParameterInfo();
-    return 0;
-  }
-
-  FILE* file;
-  file = fopen(argv[1], "r");
-
-  if (!file) {
-    fprintf(stderr, "Invalid parameter. File \"%s\" could not be opened", argv[1]);
-    printParameterInfo();
-		return 0;
-  }
-  else {
-    fclose(file);
-  }
-
+  // TODO
   return 1;
 }
 
@@ -168,18 +149,9 @@ int main(int argc, char *argv[]) {
 	string filename = argv[1];
 	CellularAutomaton* ca = new CellularAutomaton(filename, 0);
 
-	GraphicsClient* x = new GraphicsClient("127.0.0.1", 7777);
-	ca -> displayCA(*x);
 
-	unsigned char input;
-	cin >> noskipws >> input;
-
-  while (input == '\n') {
-    ca -> step(gameOfLifeRule);
-		ca -> displayCA(*x);
-
-		cin >> noskipws >> input;
-  }
+  Simulator* sim = new Simulator(ca, "127.0.0.1", 7777);
+  sim -> open();
 
 	return 0;
 }
