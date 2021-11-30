@@ -17,6 +17,7 @@
 #define FILL_OVAL 0x0B
 #define REPAINT 0x0C
 #define DRAW_LINE 0x0D
+#define FILE_REQUEST 0x0E
 
 using namespace std;
 
@@ -43,6 +44,8 @@ class GraphicsClient {
     void drawLine(int, int, int, int);
     void drawString(int, int, string);
     void repaint();
+    void requestFile();
+    int getSockfd() { return sockfd; };
 };
 
 #endif

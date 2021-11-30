@@ -1,6 +1,8 @@
 #include "GraphicsClient.h"
 #include <cstring>
 #include <unistd.h>
+#include <sys/ioctl.h>
+#include <time.h>
 
 using namespace std;
 
@@ -187,5 +189,11 @@ void GraphicsClient::drawString(int x, int y, string characters) {
 void GraphicsClient::repaint() {
   char message[6];
   preformatMessage(message, 1, REPAINT);
+  send(sockfd, message, 6, 0);
+}
+
+void GraphicsClient::requestFile() {
+  char message[6];
+  preformatMessage(message, 1, FILE_REQUEST);
   send(sockfd, message, 6, 0);
 }

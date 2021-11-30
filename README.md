@@ -18,15 +18,10 @@ java -jar GraphicsServer.jar
 make
 ```
 
-3. Run the program with 1 parameter
+1. Run the program
 
 ```bash
-./simulator.out <1>
-```
-
-#### Parameters (required)
-```
-(1) Filename (include the path, if necessary) to a file that gives the dimensions and initial state of a 2-Dimensional CA. The format of this file is a text file that contains integers seperated by spaces or new lines. The first two numbers in the file are the number of rows and columns. The rest of data (rows * columns) is the initial state of the CA.
+./simulator.out
 ```
 
 #### Provided Sample 2DCA

@@ -75,26 +75,26 @@ void CellularAutomaton::displayCA(GraphicsClient &client) {
 
   if (200 < m && m <= 600) {
     cellSize = 1;
-    gapSize= 0;
+    gapSize = 0;
   }
   else if (100 < m && m <= 200) {
     cellSize = 2;
-    gapSize= 1;
+    gapSize = 1;
   }
   else if (50 < m && m <= 100) {
     cellSize = 4;
-    gapSize= 1;
+    gapSize = 1;
   }
   else if (1 < m && m <= 50) {
     cellSize = 10;
-    gapSize= 2;
+    gapSize = 2;
   }
   else {
     fprintf(stderr, "The Cellular Automata has a width or height that cannot be displayed.\n");
     return;
   }
 
-  client.clear();
+  client.setDrawingColor(255, 255, 255);
   client.drawRectangle(0, 0, (width * (cellSize + gapSize)), (height * (cellSize + gapSize)));
 
   for (int y = 0; y < height; y++) {
@@ -106,5 +106,4 @@ void CellularAutomaton::displayCA(GraphicsClient &client) {
       }
     }
   }
-  client.repaint();
 }

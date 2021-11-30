@@ -6,20 +6,28 @@
 
 using namespace std;
 
+typedef struct MouseClick {
+  int success, type, button, x, y;
+} Click;
+
 class Simulator {
   private:
     GraphicsClient* client;
     CellularAutomaton* ca;
+    int isPlaying;
+    int size;
   public:
-    Simulator(CellularAutomaton*, string url, int port);
+    Simulator(string url, int port);
     Simulator(Simulator&);
     ~Simulator();
     void operator=(const Simulator);
-    void open();
+    void rerender();
+    Click listen();
+    void handleClick(int, int);
     void step(unsigned char (*rule)(CellularAutomaton*, int, int));
-    void run();
-    void pause();
-    void quit();
+    void togglePlayback();
+    int getPlaybackStatus() { return isPlaying; };
+    void quit() { exit(0); };
     void load();
     void clear();
     void randomize();

@@ -1,18 +1,12 @@
 #include <stdio.h>
 #include <iostream>
+
 #include "CellularAutomaton.h"
 #include "Simulator.h"
 
 using namespace std;
 
-void printParameterInfo() {
-  // TODO
-}
-
-int validateParameters(int argc, char *argv[]) {
-  // TODO
-  return 1;
-}
+struct timespec remaining, request = {(1 / 10), 100}; // TODO: check that this is correct
 
 unsigned char gameOfLifeRule(CellularAutomaton* ca, int x, int y) {
   const unsigned int width = ca -> getWidth();
@@ -141,17 +135,21 @@ unsigned char gameOfLifeRule(CellularAutomaton* ca, int x, int y) {
   return 0;
 }
 
+int main() {
+  Simulator* sim = new Simulator("127.0.0.1", 7777);
 
-int main(int argc, char *argv[]) {
-	int isValidParameters = validateParameters(argc, argv);
-  if (!isValidParameters) return 0;
+  // change loop var
+  while (true) {
+    Click click = sim -> listen();
+    if (click.success) {
+      // cout << "(" << click.x << ", " << click.y << "): type: " << click.type << " button: " << click.button << endl;
+      if (click.type == 3) {
+        sim -> handleClick(click.x, click.y);
+      } 
+    }
 
-	string filename = argv[1];
-	CellularAutomaton* ca = new CellularAutomaton(filename, 0);
-
-
-  Simulator* sim = new Simulator(ca, "127.0.0.1", 7777);
-  sim -> open();
+    nanosleep(&request, &remaining);
+  }
 
 	return 0;
 }
