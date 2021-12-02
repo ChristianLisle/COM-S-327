@@ -15,11 +15,12 @@ class CellularAutomaton {
     string file;
   public:
     CellularAutomaton(string, int);
+    CellularAutomaton(int, int, int);
     CellularAutomaton(CellularAutomaton&);
     ~CellularAutomaton();
     void operator=(const CellularAutomaton);
     void step(unsigned char (*rule)(CellularAutomaton*, int, int));
-    void displayCA(GraphicsClient&);
+    void displayCA(GraphicsClient&, unsigned int);
     void setCell(unsigned int, unsigned int, unsigned int);
     unsigned char* getCells() { return cells; };
     unsigned char getWrap() { return wrap; };

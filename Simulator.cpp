@@ -45,7 +45,7 @@ void Simulator::renderCA() {
   client -> setDrawingColor(0, 0, 0);
   client -> fillRectangle(0, 0, 600, 600);
 
-  if (ca) ca -> displayCA(*client);
+  if (ca) ca -> displayCA(*client, size);
 
   client -> repaint();
 }
@@ -93,8 +93,6 @@ void Simulator::renderAll() {
 
   renderCA();
   renderControlPanel();
-
-  client -> repaint();
 }
 
 Click Simulator::listen() {
@@ -174,7 +172,7 @@ void Simulator::load() {
   if (ca) delete ca;
   ca = new CellularAutomaton(file, 0);
 
-  renderAll();
+  renderCA();
 }
 
 void Simulator::clear() {
@@ -190,6 +188,10 @@ void Simulator::clear() {
 }
 
 void Simulator::randomize() {
+  if (!ca) {
+    ca = new CellularAutomaton(100, 100, 0);
+  }
+
   int height = ca -> getHeight();
   int width = ca -> getWidth();
   srand(time(NULL)); // Initialize randomization
@@ -203,8 +205,10 @@ void Simulator::randomize() {
 }
 
 void Simulator::handleClick(int x, int y) {
-  // TODO: implement clicking on cells
-  if (670 <= x && x <= 720) {
+  if (0 <= x <= 600) {
+    // TODO: implement clicking on cells
+  }
+  else if (670 <= x && x <= 720) {
     if (50 <= y && y <= 80) {
       if (ca) togglePlayback();
     }
@@ -215,7 +219,7 @@ void Simulator::handleClick(int x, int y) {
       if (ca) step();
     }
     else if (185 <= y && y <= 215) {
-      if (ca) randomize();
+      randomize();
     }
     else if (230 <= y && y <= 260) {
       load();
@@ -231,15 +235,14 @@ void Simulator::handleClick(int x, int y) {
 
   if (525 <= y && y <= 555) {
     if (640 <= x && x <= 670) {
-      cout << "1" << endl;
-      size = 40;
+      if (ca -> getHeight() <= 40 && ca -> getWidth() <= 40)
+        size = 40;
     }
     else if (685 <= x && x <= 715) {
-      cout << "2" << endl;
-      size = 150;
+      if (ca -> getHeight() <= 150 && ca -> getWidth() <= 150)
+        size = 150;
     }
     else if (730 <= x && x <= 760) {
-      cout << "3" << endl;
       size = 600;
     }
     renderCA();

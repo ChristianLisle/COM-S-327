@@ -31,11 +31,24 @@ CellularAutomaton::CellularAutomaton(string filename, int qState) {
       unsigned int state;
       fscanf(inputFile, "%d", &state);
 
-      cells[x + (y * width)] = state;
+      setCell(x, y, state);
     }
   }
 
   fclose(inputFile);
+}
+
+CellularAutomaton::CellularAutomaton(int w, int h, int qState) {
+  width = w;
+  height = h;
+  quiescentState = qState;
+
+  cells = new unsigned char[w * h];
+
+  if (!cells) {
+    fprintf(stderr, "There was an issue creating the Cellular Automata.\n");
+    return;
+  }
 }
 
 CellularAutomaton::CellularAutomaton(CellularAutomaton &other) {
@@ -69,38 +82,29 @@ void CellularAutomaton::step(unsigned char (*rule)(CellularAutomaton*, int, int)
   cells = newCells;
 }
 
-void CellularAutomaton::displayCA(GraphicsClient &client) {
+void CellularAutomaton::displayCA(GraphicsClient &client, unsigned int containerSize) {
   int m = max(width, height);
-  int cellSize, gapSize;
+  double cellSize = (0.8 * containerSize) / m;
+  double gapSize = (0.2 * containerSize) / m;
+  double halfGapSize = gapSize / 2;
 
-  if (200 < m && m <= 600) {
-    cellSize = 1;
-    gapSize = 0;
-  }
-  else if (100 < m && m <= 200) {
-    cellSize = 2;
-    gapSize = 1;
-  }
-  else if (50 < m && m <= 100) {
-    cellSize = 4;
-    gapSize = 1;
-  }
-  else if (1 < m && m <= 50) {
-    cellSize = 10;
-    gapSize = 2;
-  }
-  else {
-    fprintf(stderr, "The Cellular Automata has a width or height that cannot be displayed.\n");
-    return;
-  }
+  int totalWidth = width * (cellSize + gapSize);
+  int totalHeight = height * (cellSize + gapSize);
+  int xStart = (600 - totalWidth) / 2;
+  int yStart = (600 - totalHeight) / 2;
 
   client.setDrawingColor(255, 255, 255);
-  client.drawRectangle(0, 0, (width * (cellSize + gapSize)), (height * (cellSize + gapSize)));
 
   for (int y = 0; y < height; y++) {
     for (int x = 0; x < width; x++) {
-      int xCoord = x * (cellSize + gapSize);
-      int yCoord = y * (cellSize + gapSize);
+      int xCoord = (x * (cellSize + gapSize)) + xStart;
+      int yCoord = (y * (cellSize + gapSize)) + yStart;
+
+      if (x == 0)
+        xCoord += gapSize;
+      if (y == 0)
+        yCoord += gapSize;
+
       if (cells[x + (y * width)] == 1) {
         client.fillRectangle(xCoord, yCoord, cellSize, cellSize);
       }
