@@ -6,7 +6,7 @@
 
 using namespace std;
 
-struct timespec remaining, request = {(1 / 10), 100}; // TODO: check that this is correct
+struct timespec request = {0, 100000000};
 
 unsigned char gameOfLifeRule(CellularAutomaton* ca, int x, int y) {
   const unsigned int width = ca -> getWidth();
@@ -136,20 +136,21 @@ unsigned char gameOfLifeRule(CellularAutomaton* ca, int x, int y) {
 }
 
 int main() {
-  Simulator* sim = new Simulator("127.0.0.1", 7777);
+  Simulator* sim = new Simulator("127.0.0.1", 7777, gameOfLifeRule);
 
-  // change loop var
-  while (true) {
+  while (sim -> getStatus() != -1) {
     Click click = sim -> listen();
-    if (click.success) {
-      // cout << "(" << click.x << ", " << click.y << "): type: " << click.type << " button: " << click.button << endl;
-      if (click.type == 3) {
-        sim -> handleClick(click.x, click.y);
-      } 
+    if (click.success && click.type == 1) {
+      sim -> handleClick(click.x, click.y);
     }
 
-    nanosleep(&request, &remaining);
+    if (sim -> getStatus() == 1) {
+      sim -> step();
+    }
+
+    nanosleep(&request, NULL);
   }
+  cout << "quitting" << endl;
 
 	return 0;
 }

@@ -8,33 +8,49 @@
 
 using namespace std;
 
-Simulator::Simulator(string url, int port) {
+Simulator::Simulator(string url, int port, unsigned char (*caRule)(CellularAutomaton*, int, int)) {
   client = new GraphicsClient(url, port);
-  isPlaying = 0;
+  rule = caRule;
+  status = 0;
   size = 600;
-  rerender();
+  renderControlPanel();
 }
 
 Simulator::Simulator(Simulator &other) {
   ca = other.ca;
   client = other.client;
-  isPlaying = 0;
+  rule = other.rule;
+  file = other.file;
+  status = 0;
   size = 600;
+  renderAll();
 }
 
 Simulator::~Simulator() {
   delete client;
+  delete ca;
 }
 
 void Simulator::operator=(const Simulator rhs) {
   ca = rhs.ca;
   client = rhs.client;
-  isPlaying = 0;
+  rule = rhs.rule;
+  file = rhs.file;
+  status = 0;
   size = 600;
+  renderAll();
 }
 
-void Simulator::rerender() {
-  client -> clear();
+void Simulator::renderCA() {
+  client -> setDrawingColor(0, 0, 0);
+  client -> fillRectangle(0, 0, 600, 600);
+
+  if (ca) ca -> displayCA(*client);
+
+  client -> repaint();
+}
+
+void Simulator::renderControlPanel() {
   client -> setDrawingColor(127, 127, 127);
   client -> fillRectangle(600, 0, 200, 600);
 
@@ -53,23 +69,30 @@ void Simulator::rerender() {
 
   client -> setDrawingColor(0, 0, 0);
 
-  if (isPlaying) {
-    client -> drawString(682, 70, "PAUSE");
-  }
-  else {
-    client -> drawString(688, 70, "RUN");
-  }
+  if (status != 1) client -> drawString(688, 70, "RUN");
+  else client -> drawString(682, 70, "PAUSE");
+
   client -> drawString(684, 115, "RESET");
   client -> drawString(686, 160, "STEP");
   client -> drawString(674, 205, "RANDOM");
   client -> drawString(684, 250, "LOAD");
   client -> drawString(682, 295, "CLEAR");
-  client -> drawString(686, 340, "QUIT");
+
+  if (status != -1) client -> drawString(686, 340, "QUIT");
+  else client -> drawString(672, 340, "QUITTING");
+
   client -> drawString(652, 545, "1");
   client -> drawString(697, 545, "2");
   client -> drawString(742, 545, "3");
 
-  if (ca) ca -> displayCA(*client);
+  client -> repaint();
+}
+
+void Simulator::renderAll() {
+  client -> clear();
+
+  renderCA();
+  renderControlPanel();
 
   client -> repaint();
 }
@@ -84,8 +107,6 @@ Click Simulator::listen() {
   ioctl(sockfd, FIONREAD, &count);
   
   if (count) {
-    // TODO: might have to change to if count == 15, because it might interfere with files (probably not, though)
-    // printf("%d\n", count); // TODO: delete
     unsigned char buff[count];
     read(sockfd, &buff, count);
 
@@ -111,79 +132,101 @@ Click Simulator::listen() {
   return received;
 }
 
-void Simulator::step(unsigned char (*rule)(CellularAutomaton*, int, int)) {
-  // TODO
+void Simulator::step() {
+  ca -> step(rule);
+  renderCA();
 }
 
-void Simulator::togglePlayback() {
-  isPlaying ^= 1;
-  rerender();
-  // TODO
+void Simulator::reset() {
+  if (ca) delete ca;
+
+  ca = new CellularAutomaton(file, 0);
+  renderCA();
 }
 
 void Simulator::load() {
-  struct timespec remaining, request = {(1 / 10), 100}; // TODO: check that this is correct
+  status = 0; // stop stepping CA
+
+  struct timespec request = {0, 100000000};
   int sockfd = client -> getSockfd();
   client -> requestFile();
 
   int count = 0;
   while (count == 0) {
     ioctl(sockfd, FIONREAD, &count); 
-    nanosleep(&request, &remaining);
+    nanosleep(&request, NULL);
   }
 
   unsigned char buff[count];
   read(sockfd, &buff, count);
 
-  string filename = "";
+  // Ignore payloads that aren't file paths
+  if (buff[5] != 0x0A) return;
+
+  file = "";
   for (int i = 6; i < count; i++) {
     unsigned char firstByte = buff[i] << 4;
     unsigned char secondByte = buff[++i];
 
-    filename += firstByte | secondByte;
+    file += firstByte | secondByte;
   }
 
-  if (ca) {
-    delete ca;
-  }
-  ca = new CellularAutomaton(filename, 0);
+  if (ca) delete ca;
+  ca = new CellularAutomaton(file, 0);
 
-  rerender();
+  renderAll();
 }
 
 void Simulator::clear() {
-  // TODO
+  int height = ca -> getHeight();
+  int width = ca -> getWidth();
+
+  for (int y = 0; y < height; y++) {
+    for (int x = 0; x < width; x++) {
+      ca -> setCell(x, y, 0);
+    }
+  }
+  renderCA();
 }
 
 void Simulator::randomize() {
-  // TODO
+  int height = ca -> getHeight();
+  int width = ca -> getWidth();
+  srand(time(NULL)); // Initialize randomization
+
+  for (int y = 0; y < height; y++) {
+    for (int x = 0; x < width; x++) {
+      ca -> setCell(x, y, rand() % 2);
+    }
+  }
+  renderCA();
 }
 
 void Simulator::handleClick(int x, int y) {
-  // TODO
+  // TODO: implement clicking on cells
   if (670 <= x && x <= 720) {
     if (50 <= y && y <= 80) {
-      togglePlayback();
+      if (ca) togglePlayback();
     }
     else if (95 <= y && y <= 125) {
-      cout << "RESET" << endl;
+      if (!file.empty()) reset();
     }
     else if (140 <= y && y <= 170) {
-      cout << "STEP" << endl;
+      if (ca) step();
     }
     else if (185 <= y && y <= 215) {
-      cout << "RANDOM" << endl;
+      if (ca) randomize();
     }
     else if (230 <= y && y <= 260) {
-      cout << "LOAD" << endl;
       load();
     }
     else if (275 <= y && y <= 305) {
-      cout << "CLEAR" << endl;
+      if (ca) clear();
     }
     else if (320 <= y && y <= 350) {
       quit();
     }
+    renderControlPanel();
   }
 
   if (525 <= y && y <= 555) {
@@ -199,5 +242,6 @@ void Simulator::handleClick(int x, int y) {
       cout << "3" << endl;
       size = 600;
     }
+    renderCA();
   }
 }

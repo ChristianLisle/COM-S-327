@@ -14,23 +14,28 @@ class Simulator {
   private:
     GraphicsClient* client;
     CellularAutomaton* ca;
-    int isPlaying;
+    string file;
+    unsigned char (*rule)(CellularAutomaton*, int, int);
+    int status;
     int size;
-  public:
-    Simulator(string url, int port);
-    Simulator(Simulator&);
-    ~Simulator();
-    void operator=(const Simulator);
-    void rerender();
-    Click listen();
-    void handleClick(int, int);
-    void step(unsigned char (*rule)(CellularAutomaton*, int, int));
-    void togglePlayback();
-    int getPlaybackStatus() { return isPlaying; };
-    void quit() { exit(0); };
+    void renderCA();
+    void renderControlPanel();
+    void renderAll();
+    void reset();
     void load();
     void clear();
     void randomize();
+    void togglePlayback() { status ^= 1; };
+    void quit() { status = -1; };
+  public:
+    Simulator(string url, int port, unsigned char (*caRule)(CellularAutomaton*, int, int));
+    Simulator(Simulator&);
+    ~Simulator();
+    void step();
+    void operator=(const Simulator);
+    Click listen();
+    void handleClick(int, int);
+    int getStatus() { return status; };
 };
 
 #endif
