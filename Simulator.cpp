@@ -53,37 +53,72 @@ void Simulator::renderCA() {
 void Simulator::renderControlPanel() {
   client -> setDrawingColor(127, 127, 127);
   client -> fillRectangle(600, 0, 200, 600);
+  if (status == -1) {
+    client -> repaint();
+    return;
+  }
 
   client -> setDrawingColor(255, 255, 255);
-  client -> fillRectangle(670, 50, 60, 30);
-  client -> fillRectangle(670, 95, 60, 30);
-  client -> fillRectangle(670, 140, 60, 30);
-  client -> fillRectangle(670, 185, 60, 30);
-  client -> fillRectangle(670, 230, 60, 30);
-  client -> fillRectangle(670, 275, 60, 30);
-  client -> fillRectangle(670, 320, 60, 30);
-  client -> drawString(666, 510, "SELECT SIZE");
-  client -> fillRectangle(640, 525, 30, 30);
-  client -> fillRectangle(685, 525, 30, 30);
-  client -> fillRectangle(730, 525, 30, 30);
+  client -> fillRectangle(670, 185, 60, 30); // Randomize button
+  client -> fillRectangle(670, 230, 60, 30); // Load button
+  client -> fillRectangle(670, 320, 60, 30); // Quit button
 
+  // Run/Pause/Clear button are disabled given CA is not initialized
+  if (!ca) client -> setDrawingColor(200, 200, 200);  
+  client -> fillRectangle(670, 50, 60, 30); // Run/Pause button
+  client -> fillRectangle(670, 275, 60, 30); // Clear button
+
+  // Step button is disabled given CA is not initialized or simulator is already playing
+  if (!(ca && status == 0)) client -> setDrawingColor(200, 200, 200);
+  else client -> setDrawingColor(255, 255, 255);
+  client -> fillRectangle(670, 140, 60, 30); // Step button
+
+   // Reset button is disabled given CA file does not exist (CA was randomly generated and cannot be reset)
+  if (file.empty()) client -> setDrawingColor(200, 200, 200);
+  else client -> setDrawingColor(255, 255, 255);
+  client -> fillRectangle(670, 95, 60, 30); // Reset button
+  
+  // CA Size selection options - only shown when CA is initialized
+  if (ca) {
+    client -> setDrawingColor(255, 255, 255);
+    client -> drawString(666, 510, "SELECT SIZE");
+    client -> fillRectangle(730, 525, 30, 30);
+  
+    int width = ca -> getWidth(), height = ca -> getHeight();
+
+    if (width <= 150 && height <= 150) {
+      client -> fillRectangle(685, 525, 30, 30);
+
+      if (width <= 40 && height <= 40) {
+        client -> fillRectangle(640, 525, 30, 30);
+      }
+      else {
+        client -> setDrawingColor(200, 200, 200);
+        client -> fillRectangle(640, 525, 30, 30);
+      }
+    }
+    else {
+      client -> setDrawingColor(200, 200, 200);
+      client -> fillRectangle(640, 525, 30, 30); // size 1 box
+      client -> fillRectangle(685, 525, 30, 30); // size 2 box
+    }
+
+    client -> setDrawingColor(0, 0, 0);
+    client -> drawString(652, 545, "1");
+    client -> drawString(697, 545, "2");
+    client -> drawString(742, 545, "3");
+  }
+
+  // Draw button labels
   client -> setDrawingColor(0, 0, 0);
-
   if (status != 1) client -> drawString(688, 70, "RUN");
   else client -> drawString(682, 70, "PAUSE");
-
   client -> drawString(684, 115, "RESET");
   client -> drawString(686, 160, "STEP");
   client -> drawString(674, 205, "RANDOM");
   client -> drawString(684, 250, "LOAD");
   client -> drawString(682, 295, "CLEAR");
-
-  if (status != -1) client -> drawString(686, 340, "QUIT");
-  else client -> drawString(672, 340, "QUITTING");
-
-  client -> drawString(652, 545, "1");
-  client -> drawString(697, 545, "2");
-  client -> drawString(742, 545, "3");
+  client -> drawString(686, 340, "QUIT");
 
   client -> repaint();
 }
@@ -188,13 +223,14 @@ void Simulator::clear() {
 }
 
 void Simulator::randomize() {
+  srand(time(NULL)); // Initialize randomization
+
   if (!ca) {
-    ca = new CellularAutomaton(100, 100, 0);
+    ca = new CellularAutomaton(30 + rand() % 70, 30 + rand() % 70, 0);
   }
 
   int height = ca -> getHeight();
   int width = ca -> getWidth();
-  srand(time(NULL)); // Initialize randomization
 
   for (int y = 0; y < height; y++) {
     for (int x = 0; x < width; x++) {
@@ -241,12 +277,15 @@ void Simulator::handleClick(int x, int y) {
   if (670 <= x && x <= 720) {
     if (50 <= y && y <= 80) {
       if (ca) togglePlayback();
+      else return;
     }
     else if (95 <= y && y <= 125) {
       if (!file.empty()) reset();
+      else return;
     }
     else if (140 <= y && y <= 170) {
-      if (ca) step();
+      if (ca && status == 0) step();
+      else return;
     }
     else if (185 <= y && y <= 215) {
       randomize();
@@ -256,6 +295,7 @@ void Simulator::handleClick(int x, int y) {
     }
     else if (275 <= y && y <= 305) {
       if (ca) clear();
+      else return;
     }
     else if (320 <= y && y <= 350) {
       quit();
@@ -271,10 +311,12 @@ void Simulator::handleClick(int x, int y) {
     if (640 <= x && x <= 670) {
       if (height <= 40 && width <= 40)
         size = 40;
+      else return;
     }
     else if (685 <= x && x <= 715) {
       if (height <= 150 && width <= 150)
         size = 150;
+      else return;
     }
     else if (730 <= x && x <= 760) {
       size = 600;
