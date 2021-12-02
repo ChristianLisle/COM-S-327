@@ -140,7 +140,7 @@ int main() {
   while (sim -> getStatus() != -1) {
     Click click = sim -> listen();
 
-    if (click.success && click.type == 1) {
+    if (click.success && click.type == 2) {
       sim -> handleClick(click.x, click.y);
     }
 

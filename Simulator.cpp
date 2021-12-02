@@ -226,7 +226,7 @@ void Simulator::randomize() {
   srand(time(NULL)); // Initialize randomization
 
   if (!ca) {
-    ca = new CellularAutomaton(30 + rand() % 70, 30 + rand() % 70, 0);
+    ca = new CellularAutomaton(30 + rand() % 50, 30 + rand() % 50, 0);
   }
 
   int height = ca -> getHeight();

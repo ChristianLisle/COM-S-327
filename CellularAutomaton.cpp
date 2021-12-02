@@ -91,6 +91,8 @@ void CellularAutomaton::displayCA(GraphicsClient &client, unsigned int container
 
   int xStart = (600 - totalWidth) / 2, yStart = (600 - totalHeight) / 2;
 
+  client.setDrawingColor(2, 2, 2);
+  client.fillRectangle(xStart, yStart, totalWidth, totalHeight);
   client.setDrawingColor(255, 255, 255);
 
   for (int y = 0; y < height; y++) {
