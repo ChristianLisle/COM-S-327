@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <iostream>
-
 #include "CellularAutomaton.h"
 #include "Simulator.h"
 
@@ -140,6 +139,7 @@ int main() {
 
   while (sim -> getStatus() != -1) {
     Click click = sim -> listen();
+
     if (click.success && click.type == 1) {
       sim -> handleClick(click.x, click.y);
     }

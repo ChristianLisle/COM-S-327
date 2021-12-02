@@ -84,29 +84,25 @@ void CellularAutomaton::step(unsigned char (*rule)(CellularAutomaton*, int, int)
 
 void CellularAutomaton::displayCA(GraphicsClient &client, unsigned int containerSize) {
   int m = max(width, height);
-  double cellSize = (0.8 * containerSize) / m;
-  double gapSize = (0.2 * containerSize) / m;
-  double halfGapSize = gapSize / 2;
+  double cell = (0.8 * containerSize) / m, gap = (0.2 * containerSize) / m;
 
-  int totalWidth = width * (cellSize + gapSize);
-  int totalHeight = height * (cellSize + gapSize);
-  int xStart = (600 - totalWidth) / 2;
-  int yStart = (600 - totalHeight) / 2;
+  int totalWidth = width * (cell + gap);
+  int totalHeight = height * (cell + gap);
+
+  int xStart = (600 - totalWidth) / 2, yStart = (600 - totalHeight) / 2;
 
   client.setDrawingColor(255, 255, 255);
 
   for (int y = 0; y < height; y++) {
     for (int x = 0; x < width; x++) {
-      int xCoord = (x * (cellSize + gapSize)) + xStart;
-      int yCoord = (y * (cellSize + gapSize)) + yStart;
+      int xCoord = (x * (cell + gap)) + xStart;
+      int yCoord = (y * (cell + gap)) + yStart;
 
-      if (x == 0)
-        xCoord += gapSize;
-      if (y == 0)
-        yCoord += gapSize;
+      if (x == 0) xCoord += gap;
+      if (y == 0) yCoord += gap;
 
       if (cells[x + (y * width)] == 1) {
-        client.fillRectangle(xCoord, yCoord, cellSize, cellSize);
+        client.fillRectangle(xCoord, yCoord, cell, cell);
       }
     }
   }

@@ -205,10 +205,40 @@ void Simulator::randomize() {
 }
 
 void Simulator::handleClick(int x, int y) {
-  if (0 <= x <= 600) {
-    // TODO: implement clicking on cells
+  int width, height;
+  if (ca) {
+    width = ca -> getWidth();
+    height = ca -> getHeight();
+
+    if (0 <= x && x <= 600) {
+      int m = max(width, height);
+      double cell = 0.8 * (size / m), gap = 0.2 * (size / m);
+      int xStart = (600 - width * (cell + gap)) / 2;
+      int yStart = (600 - height * (cell + gap)) / 2;
+
+      for (int j = 0; j < height; j++) {
+        for (int i = 0; i < width; i++) {
+          int xCoord = (i * (cell + gap)) + xStart;
+          int yCoord = (j * (cell + gap)) + yStart;
+
+          if (i == 0) xCoord += gap;
+          if (j == 0) yCoord += gap;
+
+          if (xCoord <= x && x <= xCoord + cell) {
+            if (yCoord <= y && y <= yCoord + cell) {
+              unsigned char currentState = (ca -> getCells())[i + (j * width)];
+              ca -> setCell(i, j, !currentState);              
+              if (status != 1) renderCA();
+
+              return;
+            } 
+          }
+        }
+      }
+    }
   }
-  else if (670 <= x && x <= 720) {
+
+  if (670 <= x && x <= 720) {
     if (50 <= y && y <= 80) {
       if (ca) togglePlayback();
     }
@@ -234,12 +264,16 @@ void Simulator::handleClick(int x, int y) {
   }
 
   if (525 <= y && y <= 555) {
+    if (!ca) return;
+    width = ca -> getWidth();
+    height = ca -> getHeight();
+
     if (640 <= x && x <= 670) {
-      if (ca -> getHeight() <= 40 && ca -> getWidth() <= 40)
+      if (height <= 40 && width <= 40)
         size = 40;
     }
     else if (685 <= x && x <= 715) {
-      if (ca -> getHeight() <= 150 && ca -> getWidth() <= 150)
+      if (height <= 150 && width <= 150)
         size = 150;
     }
     else if (730 <= x && x <= 760) {
