@@ -20,6 +20,7 @@ class CellularAutomaton {
     void operator=(const CellularAutomaton);
     void step(unsigned char (*rule)(CellularAutomaton*, int, int));
     void displayCA(GraphicsClient&);
+    void setCell(unsigned int, unsigned int, unsigned int);
     unsigned char* getCells() { return cells; };
     unsigned char getWrap() { return wrap; };
     unsigned char getQuiescentState() { return quiescentState; };

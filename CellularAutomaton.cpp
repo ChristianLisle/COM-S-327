@@ -107,3 +107,7 @@ void CellularAutomaton::displayCA(GraphicsClient &client) {
     }
   }
 }
+
+void CellularAutomaton::setCell(unsigned int x, unsigned int y, unsigned int state) {
+  cells[x + (y * width)] = state;
+}
