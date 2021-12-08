@@ -249,16 +249,17 @@ void Simulator::handleClick(int x, int y) {
     if (0 <= x && x <= 600) {
       int m = max(width, height);
       double cell = 0.8 * (size / m), gap = 0.2 * (size / m);
-      int xStart = (600 - width * (cell + gap)) / 2;
-      int yStart = (600 - height * (cell + gap)) / 2;
+
+      int totalWidth = width * (cell + gap);
+      int totalHeight = height * (cell + gap);
+
+      int xStart = (600 - totalWidth) / 2;
+      int yStart = (600 - totalHeight) / 2;
 
       for (int j = 0; j < height; j++) {
         for (int i = 0; i < width; i++) {
-          int xCoord = (i * (cell + gap)) + xStart;
-          int yCoord = (j * (cell + gap)) + yStart;
-
-          if (i == 0) xCoord += gap;
-          if (j == 0) yCoord += gap;
+          int xCoord = (i * (cell + gap)) + xStart + (gap / 2);
+          int yCoord = (j * (cell + gap)) + yStart + (gap / 2);
 
           if (xCoord <= x && x <= xCoord + cell) {
             if (yCoord <= y && y <= yCoord + cell) {

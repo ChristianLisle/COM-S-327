@@ -89,7 +89,8 @@ void CellularAutomaton::displayCA(GraphicsClient &client, unsigned int container
   int totalWidth = width * (cell + gap);
   int totalHeight = height * (cell + gap);
 
-  int xStart = (600 - totalWidth) / 2, yStart = (600 - totalHeight) / 2;
+  int xStart = (600 - totalWidth) / 2;
+  int yStart = (600 - totalHeight) / 2;
 
   client.setDrawingColor(2, 2, 2);
   client.fillRectangle(xStart, yStart, totalWidth, totalHeight);
@@ -97,11 +98,8 @@ void CellularAutomaton::displayCA(GraphicsClient &client, unsigned int container
 
   for (int y = 0; y < height; y++) {
     for (int x = 0; x < width; x++) {
-      int xCoord = (x * (cell + gap)) + xStart;
-      int yCoord = (y * (cell + gap)) + yStart;
-
-      if (x == 0) xCoord += gap;
-      if (y == 0) yCoord += gap;
+      int xCoord = (x * (cell + gap)) + xStart + (gap / 2);
+      int yCoord = (y * (cell + gap)) + yStart + (gap / 2);
 
       if (cells[x + (y * width)] == 1) {
         client.fillRectangle(xCoord, yCoord, cell, cell);
