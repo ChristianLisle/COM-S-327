@@ -150,7 +150,6 @@ int main() {
 
     nanosleep(&request, NULL);
   }
-  cout << "quitting" << endl;
 
 	return 0;
 }

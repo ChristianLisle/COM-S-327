@@ -1,31 +1,32 @@
 ## Documentation
 
-The [`main.cpp`](main.cpp) file includes the main method, which references the [`CellularAutomaton.h`](CellularAutomaton.h) and [GraphicsClient.h](GraphicsClient.h) header files which implement functions implemented within [`ca.c`](ca.c).
+The [`casimulator.cpp`](casimulator.cpp) file includes the main method, and references the [`CellularAutomaton.h`](CellularAutomaton.h), [GraphicsClient.h](GraphicsClient.h), and [`Simulator.h`](`Simulator.h`) header files representing objects.
 
-In its current state, the program initializes a 2DCA based on the user input (command line arguments) file. The program then performs steps of the Game of Life rule on the 2DCA, halting after each step until the user hits `enter`. The program exits when any other character is entered.
+The program initializes a Cellular Automaton simulator. The user can then randomly generate a two-dimensional Cellular Automaton, or load one by txt file. The program then allows the user to interact with the Cellular Automaton in various ways, such as perform steps of the Game of Life rule.
+
 
 ## Files & Functions
 
-#### [`main.cpp`](main.cpp)
+#### [`casimulator.cpp`](main.cpp)
 
-`printParameterInfo` prints the parameter info. This function is to be called whenever the user enters the incorrect parameters.
+`gameOfLifeRule` is the rule to be performed on a cell in `2DCA`. The function takes parameters; `CellularAutomaton*` pointer to 2DCA, `int` x and `int` y index of character to perform rule on.
 
-`validateParameters` validate the given parameters. If the parameters are invalid, inform the user and exit the program. The function takes parameters; `int` parameter count, `char *` array of parameters.
+`main` is the application that builds and constantly refreshes a Simulator.
 
-`gameOfLifeRule` is the rule to be performed on a cell in `2DCA`. It is to be passed into the `step2DCA` function. The function takes parameters; `CellularAutomaton*` pointer to 2DCA, `int` x and `int` y index of character to perform rule on.
-
-`main` is the application that builds a 2DCA. Currently, the app builds a 2DCA based on file from user input. The program then allows the user to step through iterations of the 2DCA, displaying the 2DCA at each iteration, until the user exits the program.
 
 #### [`CellularAutomaton.h`](CellularAutomaton.h)
 
-This is the header file which defines the `CellularAutomaton` class and all functions contained in `CellularAutomaton.cpp` file, so they are readily accessable to files such as `main.cpp`.
+This is the header file which defines the `CellularAutomaton` class and all functions contained in `CellularAutomaton.cpp` file, so they are readily accessable to files such as `casimulator.cpp`.
 
 
 #### [`CellularAutomaton.cpp`](CellularAutomaton.cpp)
 
 This file contains the implementation of the `CellularAutomaton` class.
 
-`CellularAutomaton` is the default constructor that takes parameters; `string` filename, `int` quiescent state. **Note:** a copy constructor exists that takes another `CellularAutomaton` as its parameter.
+`CellularAutomaton` constructors:
+ - *default* constructor that takes parameters; `string` filename, `int` quiescent state
+ - constructor that takes parameters; `int` width, `int` height, `int` quiscent state
+ - copy constructor that takes parameters; another `CellularAutomaton`
 
 `~CellularAutomaton` is the destructor. It behaves as an object destructor should.
 
@@ -33,11 +34,16 @@ This file contains the implementation of the `CellularAutomaton` class.
 
 `step` performs a single step on the `CellularAutomaton`. The function takes parameters; `unsigned char (*rule)(CellularAutomaton*, int , int )` pointer to function representing the rule to be performed.
 
-`displayCA` utilizes an already connected `GraphicsClient` object to display the current state of the `CellularAutomaton`. The function takes parameters; `GraphicsClient` object.
+`displayCA` utilizes an already connected `GraphicsClient` object to display the current state of the `CellularAutomaton`. The function takes parameters; `GraphicsClient` object, `unsigned int` size of display container.
+
+`setCell` sets the value of a cell given an index and state. The function takes parameters; `unsigned int` x index, `unsigned int` y index, `unsigned int` state.
+
+`getCells` returns a pointer to the address of the `unsigned char` representing the cells of the Cellular Automaton.
+
 
 #### [`GraphicsClient.h`](GraphicsClient.h)
 
-This is the header file which defines the `GraphicsClient` class and all functions contained in `GraphicsClient.cpp` file, so they are readily accessable to files such as `main.cpp`.
+This is the header file which defines the `GraphicsClient` class and all functions contained in `GraphicsClient.cpp` file, so they are readily accessable to files such as `casimulator.cpp`.
 
 
 #### [`GraphicsClient.cpp`](GraphicsClient.cpp)
@@ -79,3 +85,35 @@ This file contains the implementation of the `GraphicsClient` class.
 `drawString` sends a message via socket connection to draw a string. The function takes parameters; `int` x coordinate, `int` y coordinate, `string` string to be drawn.
 
 `repaint` sends a message via socket connection to repaint the GUI.
+
+`requestFile` sends a message via socket connection to prompt the user with the file browser.
+
+
+#### [`Simulator.h`](Simulator.h)
+
+This is the header file which defines the `Simulator` class and all functions contained in `Simulator.cpp` file, so they are readily accessable to files such as `casimulator.cpp`.
+
+
+#### [`Simulator.cpp`](Simulator.cpp)
+
+`Simulator` default constructor that takes parameters; `string` address/url of Graphics Server, `int` port of GraphicsServer, `unsigned char (*)(CellularAutomaton*, int, int)` pointer function to Cellular Automaton rule. **Note:** A copy constructor that takes another Simulator as its parameter exists.
+
+`~Simulator` is the destructor. It envokes the destructors of its `CellularAutomaton` and `GraphicsClient`.
+
+`Simulator=` is the operator overload function of the `=` operator. It envokes the `Simulator` constructor on the `Simulator` parameter object passed in.
+
+`listen` is the function that listens for a mouse click. The function takes no parameters, but returns a `MouseClick` struct, which includes data; `success`, `type`, `button`, `x`, `y`.
+
+`handleClick` decides what to do given a mouse click. The function takes parameters; `x` coordinate, `y` coordinate.
+
+`getStatus` returns the status of the `Simulator`.
+
+---
+
+#### The different values of `status` are:
+
+`-1` - Program is closed (terminated)
+
+`0` - Program is paused (**defualt**)
+
+`1` - Program is playing - constantly iterating through steps of Cellular Automaton

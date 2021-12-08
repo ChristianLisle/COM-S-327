@@ -1,6 +1,6 @@
-# Cellular Automata & Sand Painting (WORK IN PROGRESS)
+# Cellular Automata ~~& Sand Painting~~
 
-This program enables for constructing, manipulating, and displaying a two-dimensional [Cellular Automata](https://mathworld.wolfram.com/ElementaryCellularAutomaton.html) (2DCA). The program allows a user to view the 2DCA through any number of steps of the [Game of Life rule](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life).
+This program acts as a simulator which enables for constructing, manipulating, and displaying two-dimensional [Cellular Automata](https://mathworld.wolfram.com/ElementaryCellularAutomaton.html) (2DCA). The program allows a user to view and interact with the 2DCA at various steps of the [Game of Life rule](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life).
 
 View more about how the program works in [DEVELOPERS.md](DEVELOPERS.md).
 
@@ -25,7 +25,7 @@ make
 ```
 
 #### Provided Sample 2DCA
-This repository includes sample text files [stable.txt](stable.txt), [blinker.txt](blinker.txt), and [glider.txt](glider.txt), which behave as their names would imply. The behavior is possible because of the [Game of Life rule](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life).
+This repository includes sample text files [stable.txt](examples/stable.txt), [blinker.txt](examples/blinker.txt), and [glider.txt](examples/glider.txt), which represent cellular automaton their names imply.
 
 ---
 
